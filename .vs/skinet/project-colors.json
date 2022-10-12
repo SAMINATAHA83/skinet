@@ -10,7 +10,17 @@
       "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
       "DisplayName": "Fichiers divers",
       "ColorIndex": -1
+    },
+    "4d925360-7740-43dd-97df-7039399ca93b": {
+      "ProjectGuid": "4d925360-7740-43dd-97df-7039399ca93b",
+      "DisplayName": "Infrastructure",
+      "ColorIndex": 1
+    },
+    "ef9172be-b1e6-49ec-af83-6cba1a2fbd9f": {
+      "ProjectGuid": "ef9172be-b1e6-49ec-af83-6cba1a2fbd9f",
+      "DisplayName": "Core",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 3
 }
