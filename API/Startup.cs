@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Infrastructure.Data;
+using Core.Interfaces;
+
 namespace API
 {
     public class Startup
@@ -16,7 +18,8 @@ namespace API
         {
 
             services.AddControllers();
-            services.AddDbContext<StoreContext>(x => x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IProductRepository, ProductReposity>();
+            services.AddDbContext<StoreContext>(x => x.UseSqlite("Data source=skinet.db"));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
