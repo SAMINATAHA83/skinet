@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Infrastructure.Data;
 using Core.Interfaces;
+using API.Helpers;
 
 namespace API
 {
@@ -19,6 +20,8 @@ namespace API
 
             services.AddControllers();
             services.AddScoped<IProductRepository, ProductReposity>();
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<StoreContext>(x => x.UseSqlite("Data source=skinet.db"));
             services.AddSwaggerGen(c =>
             {
@@ -39,6 +42,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
