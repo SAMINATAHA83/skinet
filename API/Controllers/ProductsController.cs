@@ -4,12 +4,12 @@ using Core.Interfaces;
 using Core.Specifications;
 using AutoMapper;
 using API.Dtos;
+using API.Errors;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+
+    public class ProductsController : BaseApiController
     {
         private readonly IGenericRepository<ProductType> _prodTypeRepo;
         private readonly IGenericRepository<ProductBrand> _prodBrandRepo;
@@ -42,6 +42,8 @@ namespace API.Controllers
         {
             var spec = new ProductsWithTypesAndBrandsSpecifiation(id);
             var product = await _productsRepo.GetEntityWithSpec(spec);    
+
+            if(product == null) return NotFound(new ApiResponse(404));
 
             return _mapper.Map<Product, ProductToReturnDto>(product);
 
