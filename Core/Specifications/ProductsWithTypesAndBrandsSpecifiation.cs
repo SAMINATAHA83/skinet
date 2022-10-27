@@ -4,31 +4,31 @@ namespace Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecifiation : BaseSpecification<Product>
     {
-        public ProductsWithTypesAndBrandsSpecifiation(ProductSpecParams prodParams) 
-            : base(x=> 
+        public ProductsWithTypesAndBrandsSpecifiation(ProductSpecParams prodParams)
+            : base(x =>
                 (string.IsNullOrEmpty(prodParams.Search) || x.Name.ToLower().Contains(prodParams.Search)) &&
-                (!prodParams.BrandId.HasValue || x.ProductBrandId == prodParams.BrandId) && 
+                (!prodParams.BrandId.HasValue || x.ProductBrandId == prodParams.BrandId) &&
                 (!prodParams.TypeId.HasValue || x.ProductTypeId == prodParams.TypeId)
             )
         {
             AddInclude(x => x.ProductType);
             AddInclude(x => x.ProductBrand);
             AddOrderby(x => x.Name);
-            ApplyPaging(prodParams.PageSize * (prodParams.PageIndex -1), prodParams.PageSize);
+            ApplyPaging(prodParams.PageSize * (prodParams.PageIndex - 1), prodParams.PageSize);
 
-            if(!string.IsNullOrEmpty(prodParams.Sort))
+            if (!string.IsNullOrEmpty(prodParams.Sort))
             {
                 switch (prodParams.Sort)
                 {
                     case "priceAsc":
-                       AddOrderby(p=> p.Price);
-                       break;
+                        AddOrderby(p => p.Price);
+                        break;
                     case "priceDesc":
-                       AddOrderbyDescending(p=> p.Price);
-                       break;
+                        AddOrderbyDescending(p => p.Price);
+                        break;
                     default:
-                       AddOrderby(n=> n.Name);
-                       break;
+                        AddOrderby(n => n.Name);
+                        break;
                 }
             }
         }

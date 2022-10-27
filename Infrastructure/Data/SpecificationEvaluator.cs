@@ -10,22 +10,22 @@ namespace Infrastructure.Data
         {
             var query = inputQuery;
 
-            if(spec.Criteria != null)
+            if (spec.Criteria != null)
             {
                 query = query.Where(spec.Criteria);
             }
 
-            if(spec.Orderby != null)
+            if (spec.Orderby != null)
             {
                 query = query.OrderBy(spec.Orderby);
             }
 
-            if(spec.OrderbyDescending != null)
+            if (spec.OrderbyDescending != null)
             {
                 query = query.OrderByDescending(spec.OrderbyDescending);
             }
 
-            if(spec.isPagingEnabled)
+            if (spec.isPagingEnabled)
             {
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }

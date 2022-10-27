@@ -9,8 +9,7 @@ export class AppComponent implements OnInit {
 
   title = 'SkiNet';
 
-  constructor()
-  {
+  constructor() {
   }
 
   ngOnInit(): void {

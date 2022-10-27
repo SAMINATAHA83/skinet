@@ -3,7 +3,7 @@ using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Data 
+namespace Infrastructure.Data
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
@@ -32,7 +32,7 @@ namespace Infrastructure.Data
         {
             return await ApplySpecificiation(spec).ToListAsync();
         }
-       
+
         public async Task<int> CountAsync(ISpecification<T> spec)
         {
             return await ApplySpecificiation(spec).CountAsync();
