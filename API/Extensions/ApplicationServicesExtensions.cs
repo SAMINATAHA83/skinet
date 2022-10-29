@@ -10,6 +10,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServcies(this IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductReposity>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             //error lors de validation
             services.Configure<ApiBehaviorOptions>(options =>
