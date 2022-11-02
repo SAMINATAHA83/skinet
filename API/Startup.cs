@@ -4,6 +4,7 @@ using API.Helpers;
 using API.Middleware;
 using API.Extensions;
 using StackExchange.Redis;
+using Infrastructure.Data.Identity;
 
 namespace API
 {
@@ -18,21 +19,34 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();     
+            services.AddControllers();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<StoreContext>(x => x.UseSqlite("Data source=skinet.db"));
+            //GetConnectionString ne retourne rien
+            //TODO : Investigation (Pourquoi?)
+            /*services.AddDbContext<AppIdentityDbContext>(x =>
+            {
+                x.UseSqlite(_configuration.GetConnectionString("IdentityConnection"));
+            });*/
+            services.AddDbContext<AppIdentityDbContext>(x =>
+            {
+                x.UseSqlite("Data source=identity.db");
+            });
+
 
             //Redis
-            services.AddSingleton<IConnectionMultiplexer>(c=> {
-                var configuration = ConfigurationOptions.Parse("localhost",true);
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var configuration = ConfigurationOptions.Parse("localhost", true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
 
             services.AddApplicationServcies();
+            services.AddIdentityServices(_configuration);
             services.AddSwaggerDocumentation();
-            services.AddCors(opt => 
+            services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", policy => 
+                opt.AddPolicy("CorsPolicy", policy =>
                 {
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
 
@@ -49,6 +63,7 @@ namespace API
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseStaticFiles(); //pour l'affichage des images
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors("CorsPolicy"); //pour la configuration des clients (Angular)
             app.UseEndpoints(endpoints =>
