@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using API.Errors;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using API.Extensions;
 using AutoMapper;
 
@@ -61,7 +60,7 @@ namespace API.Controllers
 
             var result = await _userManager.UpdateAsync(user);
 
-            if(!result.Succeeded) return Ok(_mapper.Map<Address, AddressDto>(user.Address));
+            if (!result.Succeeded) return Ok(_mapper.Map<Address, AddressDto>(user.Address));
 
             return BadRequest("Problem updating the user");
         }
@@ -77,7 +76,7 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized(new ApiResponse(401));
             }
@@ -95,8 +94,16 @@ namespace API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto) 
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
+            if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
+            {
+                return new BadRequestObjectResult(new ApiValidationErrorReponse 
+                { 
+                    Errors = new[] {"Email address is use"}                   
+                });
+            }
+
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
@@ -115,7 +122,5 @@ namespace API.Controllers
                 Email = user.Email
             };
         }
-
-       
     }
 }
