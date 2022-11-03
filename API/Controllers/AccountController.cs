@@ -65,7 +65,7 @@ namespace API.Controllers
             return BadRequest("Problem updating the user");
         }
 
-        [HttpPost("emailexists")]
+        [HttpGet("emailexists")]
         public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
         {
             return await _userManager.FindByEmailAsync(email) != null;
