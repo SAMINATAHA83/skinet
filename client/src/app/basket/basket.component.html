@@ -1,8 +1,8 @@
 <div class="container mt-2">
-  <div *ngIf="(basket$ | async) === null">
+  <div *ngIf="(basket$ | async).items.length == 0">
     <p>There are no items in your basket</p>
   </div>
-  <div *ngIf="basket$ | async">
+  <div *ngIf="(basket$ | async).items.length > 0">
     <div class="pb-5">
       <div class="container">
         <div class="row">
