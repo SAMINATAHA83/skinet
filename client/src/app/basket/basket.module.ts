@@ -4,8 +4,6 @@ import { BasketComponent } from './basket.component';
 import { BasketRoutingModule } from './basket-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
-
-
 @NgModule({
   declarations: [
     BasketComponent
@@ -13,7 +11,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     BasketRoutingModule,
-    SharedModule
+    SharedModule 
   ]
 })
 export class BasketModule { }

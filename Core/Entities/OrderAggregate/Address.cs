@@ -6,9 +6,9 @@
         {
         }
 
-        public Address(string firsName, string lastName, string street, string city, string state, string zipCode)
+        public Address(string firstName, string lastName, string street, string city, string state, string zipCode)
         {
-            FirsName = firsName;
+            FirstName = firstName;
             LastName = lastName;
             Street = street;
             City = city;
@@ -16,7 +16,7 @@
             ZipCode = zipCode;
         }
 
-        public string FirsName { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Street { get; set; }
         public string City { get; set; }

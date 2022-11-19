@@ -15,7 +15,7 @@ namespace Infrastructure.Identity
                     UserName = "samatar.yacin",
                     Address = new Address
                     {
-                        FirsName = "Samatar",
+                        FirstName = "Samatar",
                         LastName = "Yacin",
                         Street = "2e rue Est",
                         City = "Amos",

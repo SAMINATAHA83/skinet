@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20221104135203_OrderEntityAdded")]
+    [Migration("20221117143802_OrderEntityAdded")]
     partial class OrderEntityAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,8 +58,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("DeliveryMethodId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("OrderDate")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("OrderDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PaymentIntentId")
                         .IsRequired()
@@ -186,7 +186,7 @@ namespace Infrastructure.Data.Migrations
                                 .IsRequired()
                                 .HasColumnType("TEXT");
 
-                            b1.Property<string>("FirsName")
+                            b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasColumnType("TEXT");
 
@@ -232,14 +232,16 @@ namespace Infrastructure.Data.Migrations
                             b1.Property<int>("OrderItemId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("PictureUrl")
-                                .HasColumnType("INTEGER");
+                            b1.Property<string>("PictureUrl")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
 
                             b1.Property<int>("ProducItemtId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("ProductName")
-                                .HasColumnType("INTEGER");
+                            b1.Property<string>("ProductName")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("OrderItemId");
 

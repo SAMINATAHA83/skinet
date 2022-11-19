@@ -31,7 +31,7 @@ namespace Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirsName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
