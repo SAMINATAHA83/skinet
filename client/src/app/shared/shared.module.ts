@@ -41,7 +41,8 @@ import { BasketSummaryComponent } from './components/basket-summary/basket-summa
     BsDropdownModule,
     TextInputComponent,
     CdkStepperModule,
-    StepperComponent
+    StepperComponent,
+    BasketSummaryComponent
   ]
 })
 export class SharedModule { }

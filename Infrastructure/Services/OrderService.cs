@@ -9,9 +9,11 @@ namespace Infrastructure.Services
     {
         private readonly IBasketRepository _basketRepo;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPaymentService _paymentService;
 
-        public OrderService(IBasketRepository basketRepo, IUnitOfWork unitOfWork)
+        public OrderService(IBasketRepository basketRepo, IUnitOfWork unitOfWork, IPaymentService paymentService)
         {
+            _paymentService = paymentService;
             _basketRepo = basketRepo;
             _unitOfWork = unitOfWork;
         }
@@ -21,7 +23,7 @@ namespace Infrastructure.Services
             var basket = await _basketRepo.GetBasketAsync(basketId);
 
             var items = new List<OrderItem>();
-            foreach(var item in basket.Items)
+            foreach (var item in basket.Items)
             {
                 var productItem = await _unitOfWork.Repository<Product>().GetByIdAsync(item.Id);
                 var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
@@ -33,17 +35,24 @@ namespace Infrastructure.Services
 
             var subtotal = items.Sum(item => item.Price * item.Quantity);
 
+            //Vérifier si la commande existe déjà
+            var spec = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
+            var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if (existingOrder != null)
+            {
+                _unitOfWork.Repository<Order>().Delete(existingOrder);
+            }
+
+
             //créer la commande
-            var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
+            var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, basket.PaymentIntentId);
             _unitOfWork.Repository<Order>().Add(order);
 
             //Enregistrer la commande dans la bd
             var resultat = await _unitOfWork.Complete();
 
             if (resultat <= 0) return null;
-
-            //supprimer le panier dans le redis
-            await _basketRepo.DeleteBasketAsync(basketId);
 
             //retourner la commande
             return order;
