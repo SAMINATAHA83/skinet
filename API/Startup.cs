@@ -5,6 +5,7 @@ using API.Middleware;
 using API.Extensions;
 using StackExchange.Redis;
 using Infrastructure.Data.Identity;
+using Microsoft.Extensions.FileProviders;
 
 namespace API
 {
@@ -21,7 +22,8 @@ namespace API
         {
             services.AddControllers();
             services.AddAutoMapper(typeof(MappingProfiles));
-            services.AddDbContext<StoreContext>(x => x.UseSqlite("Data source=skinet.db"));
+            services.AddDbContext<StoreContext>(x =>
+             x.UseNpgsql(_configuration.GetConnectionString("DefaultConnection")));
             //GetConnectionString ne retourne rien
             //TODO : Investigation (Pourquoi?)
             /*services.AddDbContext<AppIdentityDbContext>(x =>
@@ -30,7 +32,7 @@ namespace API
             });*/
             services.AddDbContext<AppIdentityDbContext>(x =>
             {
-                x.UseSqlite("Data source=identity.db");
+                x.UseNpgsql(_configuration.GetConnectionString("IdentityConnection"));
             });
 
 
@@ -63,12 +65,18 @@ namespace API
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseStaticFiles(); //pour l'affichage des images
+            app.UseStaticFiles(new StaticFileOptions //on a deplace les images dans le dossier content
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")),
+                RequestPath = "/content"
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors("CorsPolicy"); //pour la configuration des clients (Angular)
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fullback"); // Fullback
             });
         }
     }
